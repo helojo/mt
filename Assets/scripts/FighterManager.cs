@@ -22,9 +22,9 @@ public class FighterManager : FighterBase {
 
     public override void OnCreateInit()
     {
-        FighterData fighterData = base.fighterData;
+        BattleData fighterData = base.fighterData;
         fighterData.OnMsgEnter = (System.Action)Delegate.Combine(fighterData.OnMsgEnter, new System.Action(OnMsgEnter));
-        FighterData data2 = base.fighterData;
+        BattleData data2 = base.fighterData;
         //data2.OnMsgLeave = (System.Action)Delegate.Combine(data2.OnMsgLeave, new System.Action(this.OnMsgLeave));
         //FighterData data3 = base.fighterData;
         //data3.OnMsgTimeScaleChange = (System.Action)Delegate.Combine(data3.OnMsgTimeScaleChange, new System.Action(this.OnMsgTimeScaleChange));
@@ -39,9 +39,10 @@ public class FighterManager : FighterBase {
     {
         //if (!BattleSceneStarter.G_isTestEnable)
         //{
-        //    this.InitFightersFormBattleDate();
+        //    InitFightersFormBattleDate();
         //}
     }
+
 
     void Start()
     {
@@ -50,5 +51,26 @@ public class FighterManager : FighterBase {
     void Update()
     {
 
+    }
+
+    /// <summary>
+    /// 添加参战角色
+    /// </summary>
+    /// <param name="actor"></param>
+    /// <param name="posIndex"></param>
+    /// <param name="serverIndex"></param>
+    private void AddFighter(FighterData actor, int posIndex, int serverIndex)
+    {
+        if ((actor != null) && (actor.entry != -1))
+        {
+            if (actor.isHero)
+            {
+                //createFighter(actor.entry, posIndex, 1f, actor, serverIndex, false);
+            }
+            else
+            {
+                //createMonsterFighter(actor.entry, posIndex, actor, serverIndex);
+            }
+        }
     }
 }

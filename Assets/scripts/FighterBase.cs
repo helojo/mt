@@ -8,12 +8,12 @@ public class FighterBase : MonoBehaviour
     {
     }
 
-    public void OnMsgCreateInit(FighterData _gameData)
+    public void OnMsgCreateInit(BattleData _gameData)
     {
         this.fighterData = _gameData;
         this.OnCreateInit();
     }
 
-    public FighterData fighterData { get; private set; }
+    public BattleData fighterData { get; private set; }
 }
 

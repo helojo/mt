@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class FighterData
+public class BattleData
 {
     //private bool _isAuto;
     //private int _startPhase;
