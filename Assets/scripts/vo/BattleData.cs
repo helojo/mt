@@ -7,7 +7,7 @@ public class BattleData
 {
     //private bool _isAuto;
     //private int _startPhase;
-    //private float _timeScale = 1f;
+    private float _timeScale = 1f;
     //private float _timeScale_ShowTime = 1f;
     //[CompilerGenerated]
     //private static Action<AudioSource> <>f__am$cache44;
@@ -130,16 +130,16 @@ public class BattleData
     //    return Mathf.Clamp01(((float) num2) / ((float) count));
     //}
 
-    //public void InitBattleValue()
-    //{
-    //    this._isAuto = SettingMgr.mInstance.GetCommonBool("BATTLEAUTO");
-    //    this._timeScale = SettingMgr.mInstance.GetCommonFloat("BATTLESCALE");
-    //    if (this._timeScale <= 0f)
-    //    {
-    //        this._timeScale = 1f;
-    //    }
-    //    BattleGlobal.SetTimeScale(this._timeScale);
-    //}
+    public void Init()
+    {
+        //this._isAuto = SettingMgr.mInstance.GetCommonBool("BATTLEAUTO");
+        //this._timeScale = SettingMgr.mInstance.GetCommonFloat("BATTLESCALE");
+        if (this._timeScale <= 0f)
+        {
+            this._timeScale = 1f;
+        }
+        //BattleGlobal.SetTimeScale(this._timeScale);
+    }
 
     //private bool IsAutoForce()
     //{
@@ -175,7 +175,7 @@ public class BattleData
     //    return (this.battleTime = 0f);
     //}
 
-    //public GameObject battleComObject { get; set; }
+    public GameObject gameMainObj { get; set; }
 
     //public BattleGameType gameType { get; set; }
 

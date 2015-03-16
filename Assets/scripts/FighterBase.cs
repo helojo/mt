@@ -10,10 +10,10 @@ public class FighterBase : MonoBehaviour
 
     public void OnMsgCreateInit(BattleData _gameData)
     {
-        this.fighterData = _gameData;
+        this.battleData = _gameData;
         this.OnCreateInit();
     }
 
-    public BattleData fighterData { get; private set; }
+    public BattleData battleData { get; private set; }
 }
 
