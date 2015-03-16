@@ -23,7 +23,7 @@ public class FighterManager : FighterBase {
     public override void OnCreateInit()
     {
         BattleData battleData = base.battleData;
-        battleData.OnMsgEnter = (System.Action)Delegate.Combine(battleData.OnMsgEnter, new System.Action(OnMsgEnter));
+        battleData.OnMsgEnter = (Action)Delegate.Combine(battleData.OnMsgEnter, new Action(OnMsgEnter));
         BattleData data2 = base.battleData;
         //data2.OnMsgLeave = (System.Action)Delegate.Combine(data2.OnMsgLeave, new System.Action(this.OnMsgLeave));
         //FighterData data3 = base.fighterData;
@@ -33,6 +33,7 @@ public class FighterManager : FighterBase {
         //FighterData data5 = base.fighterData;
         //data5.OnMsgPhaseChange = (System.Action)Delegate.Combine(data5.OnMsgPhaseChange, new System.Action(this.OnMsgPhaseChange));
         ////base.OnCreateInit();
+        //Debug.Log("alet");
     }
 
     private void OnMsgEnter()
@@ -41,6 +42,21 @@ public class FighterManager : FighterBase {
         //{
         //    InitFightersFormBattleDate();
         //}
+       
+    }
+
+    public void InitFightersFormBattleDate()
+    {
+        if (base.battleData.attActor != null)
+        {
+            int posIndex = 0;
+            foreach (FighterData actor in base.battleData.attActor)
+            {
+                AddFighter(actor, posIndex);
+                posIndex++;
+            }
+            //OnFighterInitFinish();
+        }
     }
 
 
@@ -59,18 +75,17 @@ public class FighterManager : FighterBase {
     /// </summary>
     /// <param name="actor"></param>
     /// <param name="posIndex"></param>
-    /// <param name="serverIndex"></param>
-    private void AddFighter(FighterData actor, int posIndex, int serverIndex)
+    private void AddFighter(FighterData actor, int posIndex)
     {
         if ((actor != null) && (actor.entry != -1))
         {
             if (actor.isHero)
             {
-                createFighter(actor.entry, posIndex, 1f, actor, serverIndex, false);
+                createFighter(actor.entry, posIndex, 1f, actor , false);
             }
             else
             {
-                //createMonsterFighter(actor.entry, posIndex, actor, serverIndex);
+                //createMonsterFighter(actor.entry, posIndex, actor);
             }
         }
     }
@@ -108,7 +123,7 @@ public class FighterManager : FighterBase {
     /// <param name="serverIdx"></param>
     /// <param name="isBigBoss"></param>
     /// <returns></returns>
-    public GameObject createFighter(int entry, int pos, float scale, FighterData actor, int serverIdx, bool isBigBoss = false)
+    public GameObject createFighter(int entry, int pos, float scale, FighterData actor, bool isBigBoss = false)
     {
         if (entry < 0)
         {
@@ -122,7 +137,6 @@ public class FighterManager : FighterBase {
         Fighter fighter = obj2.AddComponent<Fighter>();
         fighter.PosIndex = pos;
         fighter.Init(base.battleData, scale, flag, entry, actor);
-        //fighter.ServerIdx = serverIdx;
         fighters[pos] = fighter;
         UpdateFighterPos(pos);
         return obj2;

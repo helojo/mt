@@ -32,7 +32,6 @@ public class GameMain : GameBase
         //base.battleGameData.battleComObject.AddComponent<BattleCom_CameraManager>().SetEnable(false);
         //base.battleGameData.battleComObject.AddComponent<BattleGridGameMapControl>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_TestManager>();
-        //base.battleGameData.battleComObject.AddComponent<BattleCom_FighterManager>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_ScenePosManager>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_UIControl>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_StoryControl>();
@@ -40,7 +39,7 @@ public class GameMain : GameBase
         //base.battleGameData.battleComObject.AddComponent<BattleCom_Runtime>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_PhaseManager>();
         //base.battleGameData.battleComObject.AddComponent<BattleCom_CameraManager>();
-        //base.battleGameData.battleComObject.AddComponent<BattleCom_SceneEffect>();
+        base.battleGameData.gameMainObj.AddComponent<FighterManager>();
         base.battleGameData.gameMainObj.SendMessage("OnMsgCreateInit", base.battleGameData);
     }
 

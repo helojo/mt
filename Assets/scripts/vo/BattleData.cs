@@ -11,7 +11,7 @@ public class BattleData
     //private float _timeScale_ShowTime = 1f;
     //[CompilerGenerated]
     //private static Action<AudioSource> <>f__am$cache44;
-    //public List<CombatDetailActor> attActor;
+    public List<FighterData> attActor;//角色信息
     //private TssSdtFloat battleTime = 0f;
     //public List<int> buffLists;
     //public Action<bool, BattleNormalGameType, BattleNormalGameResult> callBackFunc;
@@ -42,7 +42,7 @@ public class BattleData
     //public Action<long, long> OnMsgBossHPChange;
     //public System.Action OnMsgBreak;
     //public Action<bool> OnMsgEnableControl;
-    public System.Action OnMsgEnter;
+    public Action OnMsgEnter;
     //public System.Action OnMsgFighterChange;
     //public Action<int> OnMsgFighterDestory;
     //public Action<int, SkillEffectResult> OnMsgFighterInfoChange;
