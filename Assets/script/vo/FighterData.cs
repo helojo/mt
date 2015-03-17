@@ -2,9 +2,12 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class FighterData : MonoBehaviour
+public class FighterData
 {
     public int entry;
     public bool isHero;
+
+    public int maxHp;
+    public int curHp;
 }
 

@@ -49,6 +49,13 @@ public class GameMain : GameBase
         //gameMainObj.GetComponent<BattleCom_ScenePosManager>().InitSceneInfo();
         //gameMainObj.GetComponent<BattleCom_CameraManager>().InitBindCamera();
         //gameMainObj.GetComponent<BattleCom_CameraManager>().SetEnable(false);
+        base.battleGameData.attActor = new List<FighterData>();
+        FighterData f1 = new FighterData();
+        f1.entry = 1;
+        f1.isHero=true;
+        f1.maxHp=500;
+        f1.curHp=500;
+        base.battleGameData.attActor.Add(f1);
         //base.battleGameData.attActor = null;
         //base.battleGameData.defActor = null;
         //base.battleGameData.drops = null;

@@ -11,13 +11,17 @@ public class FighterManager : FighterBase {
     private List<Fighter> fighters { get; set; }//战斗对象
     public GameObject playerTeamObj { get; private set; }
     public TeamMove teamMove { get; set; }
-
+    private GameObject fighterCard;
+    private GameObject fighterEffect;
     /// <summary>
     /// 战斗管理器
     /// </summary>
     public FighterManager()
     {
         fighters = new List<Fighter>(new Fighter[BattleGlobal.FighterNumberMax * 2]);
+        fighterCard = (GameObject)Resources.Load("Prefabs/hero");
+        //fighterEffect = (GameObject)Resources.Load("Prefabs/fightEffect");
+        fighterEffect = (GameObject)Resources.Load("Prefabs/fightEffect");
     }
 
     public override void OnCreateInit()
@@ -42,7 +46,14 @@ public class FighterManager : FighterBase {
         //{
         //    InitFightersFormBattleDate();
         //}
-       
+        //Debug.Log(fighterEffect);
+        GameObject obj = (GameObject)Instantiate(fighterEffect);
+        Animator effect = obj.GetComponent<Animator>();
+        effect.Play("dao");
+        //DestroyObject(effect);
+        
+        //InitFightersFormBattleDate();
+        //Debug.Log(effect);
     }
 
     public void InitFightersFormBattleDate()
@@ -130,10 +141,8 @@ public class FighterManager : FighterBase {
             return null;
         }
         bool flag = pos < BattleGlobal.FighterNumberOneSide;
-        GameObject obj2 = new GameObject
-        {
-            name = "fighter " + pos.ToString()
-        };
+        GameObject obj2 = (GameObject)Instantiate(fighterCard);
+        obj2.name = "fighter " + pos.ToString();
         Fighter fighter = obj2.AddComponent<Fighter>();
         fighter.PosIndex = pos;
         fighter.Init(base.battleData, scale, flag, entry, actor);
@@ -156,34 +165,23 @@ public class FighterManager : FighterBase {
 
     private void PlaceFighter(Fighter fighter, int posIndex, bool isPlayer)
     {
-        //Vector3 zero = Vector3.zero;
-        //Quaternion identity = Quaternion.identity;
-        //if (isPlayer)
-        //{
-        //    zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterStartPosByPhase(fighter.GetIndexAtLive());
-        //    identity = Quaternion.LookRotation(base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
-        //}
+        Vector3 zero = Vector3.zero;
+        Quaternion identity = Quaternion.identity;
+        if (isPlayer)
+        {
+            //zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterStartPosByPhase(fighter.GetIndexAtLive());
+            //identity = Quaternion.LookRotation(base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
+        }
         //else
         //{
         //    int monsterIndex = posIndex - BattleGlobal.FighterNumberMax;
         //    if ((monsterIndex >= 0) && (monsterIndex < BattleGlobal.FighterNumberOneSide))
         //    {
-        //        if (fighter.IsBigBoss)
-        //        {
-        //            if ((monsterIndex >= 0) && (monsterIndex < BattleGlobal.FighterNumberOneSide))
-        //            {
-        //                zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetMonsterInitPos(monsterIndex);
-        //                identity = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetMonsterInitRot(monsterIndex);
-        //            }
-        //        }
-        //        else
-        //        {
         //            zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterEndPosByPhase(monsterIndex + BattleGlobal.FighterNumberOneSide);
         //            identity = Quaternion.LookRotation(-base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
-        //        }
         //    }
         //}
-        //fighter.SetPosition(zero);
-        //fighter.transform.rotation = identity;
+        fighter.transform.TransformPoint(zero);
+        fighter.transform.rotation = identity;
     }
 }
