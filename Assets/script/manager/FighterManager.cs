@@ -13,6 +13,8 @@ public class FighterManager : FighterBase {
     public TeamMove teamMove { get; set; }
     private GameObject fighterCard;
     private GameObject fighterEffect;
+
+    private Animator effect;
     /// <summary>
     /// 战斗管理器
     /// </summary>
@@ -48,11 +50,11 @@ public class FighterManager : FighterBase {
         //}
         //Debug.Log(fighterEffect);
         GameObject obj = (GameObject)Instantiate(fighterEffect);
-        Animator effect = obj.GetComponent<Animator>();
-        effect.Play("dao");
+        effect = obj.GetComponent<Animator>();
+        //effect.Play("dao");
         //DestroyObject(effect);
         
-        //InitFightersFormBattleDate();
+        InitFightersFormBattleDate();
         //Debug.Log(effect);
     }
 
@@ -90,39 +92,9 @@ public class FighterManager : FighterBase {
     {
         if ((actor != null) && (actor.entry != -1))
         {
-            if (actor.isHero)
-            {
-                createFighter(actor.entry, posIndex, 1f, actor , false);
-            }
-            else
-            {
-                //createMonsterFighter(actor.entry, posIndex, actor);
-            }
+            createFighter(actor.entry, posIndex, 1f, actor);
         }
     }
-
-    /// <summary>
-    ///  创建怪物
-    /// </summary>
-    /// <param name="entry"></param>
-    /// <param name="pos"></param>
-    /// <param name="detailActor"></param>
-    /// <param name="serverIdx"></param>
-    /// <returns></returns>
-    //public GameObject createMonsterFighter(int entry, int pos, FighterData actor, int serverIdx)
-    //{
-    //    //monster_config _config = ConfigMgr.getInstance().getByEntry<monster_config>(entry);
-    //    //if (_config == null)
-    //    //{
-    //    //    Debug.LogWarning("Can't find monster config ID: " + entry.ToString());
-    //    //    _config = ConfigMgr.getInstance().getByEntry<monster_config>(0);
-    //    //}
-    //    //if (_config != null)
-    //    //{
-    //    //    return createFighter(_config.card_entry, pos, _config.zoom, actor, serverIdx, _config.type == 2);
-    //    //}
-    //    //return null;
-    //}
 
     /// <summary>
     ///  创建角色
@@ -134,7 +106,7 @@ public class FighterManager : FighterBase {
     /// <param name="serverIdx"></param>
     /// <param name="isBigBoss"></param>
     /// <returns></returns>
-    public GameObject createFighter(int entry, int pos, float scale, FighterData actor, bool isBigBoss = false)
+    public GameObject createFighter(int entry, int pos, float scale, FighterData actor)
     {
         if (entry < 0)
         {
@@ -163,12 +135,51 @@ public class FighterManager : FighterBase {
         }
     }
 
+
+    private const float offsetH = 1.6f;
+    private const float offsetV = 1.6f;
+    private const float offsetD = 3.6f;
     private void PlaceFighter(Fighter fighter, int posIndex, bool isPlayer)
     {
         Vector3 zero = Vector3.zero;
         Quaternion identity = Quaternion.identity;
+        Debug.Log(isPlayer);
+        
         if (isPlayer)
         {
+            //fighter.transform.localScale *= SCALE;
+            float x = 0;
+            float y = offsetD / 2;
+            //y
+            if (posIndex > 3)
+            {
+                y += offsetV;
+            }
+            if (posIndex % 2 == 0)
+            {
+                y = -y;
+            }
+            //x
+            switch (posIndex / 2)
+            {
+                case 0:
+                    x = -offsetH / 2;
+                    break;
+                case 1:
+                    x = offsetH / 2;
+                    break;
+                case 2:
+                    x = -offsetH;
+                    break;
+                case 3:
+                    x = 0;
+                    break;
+                case 4:
+                    x = offsetH;
+                    break;
+            }
+            Debug.Log(fighter.name + "_" + x+"_"+y);
+            zero = new Vector3(x, y, 0);
             //zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterStartPosByPhase(fighter.GetIndexAtLive());
             //identity = Quaternion.LookRotation(base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
         }
@@ -181,7 +192,9 @@ public class FighterManager : FighterBase {
         //            identity = Quaternion.LookRotation(-base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
         //    }
         //}
-        fighter.transform.TransformPoint(zero);
+        //fighter.transform.TransformPoint(zero);
+        fighter.transform.Translate(zero);
+        //fighter.transform.Translate(x, y, 0);
         fighter.transform.rotation = identity;
     }
 }

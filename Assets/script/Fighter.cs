@@ -15,11 +15,11 @@ public class Fighter : MonoBehaviour {
     public FighterData actor;
     public int entry;//实例id
 
-    public void Init(BattleData _data, float _scale, bool inNum, int _entry, FighterData _actor)
+    public void Init(BattleData _data, float _scale, bool _isPlayer, int _entry, FighterData _actor)
     {
         battleData = _data;
         //CardEntry = _cardEntry;
-        //isPlayer = _isPlayer;
+        isPlayer = _isPlayer;
         //MaxHP = actor.maxHp;
         //HP = actor.curHp;
         //Energy = _detailActor.energy;
