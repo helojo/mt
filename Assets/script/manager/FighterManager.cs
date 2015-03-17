@@ -20,6 +20,21 @@ public class FighterManager : FighterBase {
     /// </summary>
     public FighterManager()
     {
+        //英雄
+        teamPos.Add(new Vector3(-2, -1.2f, 0));
+        teamPos.Add(new Vector3(0, -1.2f, 0));
+        teamPos.Add(new Vector3(2, -1.2f, 0));
+        teamPos.Add(new Vector3(-2, -3.6f, 0));
+        teamPos.Add(new Vector3(0, -3.6f, 0));
+        teamPos.Add(new Vector3(2, -3.6f, 0));
+        //怪物
+        teamPos.Add(new Vector3(-2, 1.2f, 0));
+        teamPos.Add(new Vector3(0, 1.2f, 0));
+        teamPos.Add(new Vector3(2, 1.2f, 0));
+        teamPos.Add(new Vector3(-2, 3.6f, 0));
+        teamPos.Add(new Vector3(0, 3.6f, 0));
+        teamPos.Add(new Vector3(2, 3.6f, 0));
+        
         fighters = new List<Fighter>(new Fighter[BattleGlobal.FighterNumberMax * 2]);
         fighterCard = (GameObject)Resources.Load("Prefabs/hero");
         //fighterEffect = (GameObject)Resources.Load("Prefabs/fightEffect");
@@ -75,12 +90,22 @@ public class FighterManager : FighterBase {
 
     void Start()
     {
-
+        
     }
 
+    private float timer = 0f;
+    public const float attackDistance = 1f;
     void Update()
     {
-
+        //if (BackgroundManager.state == BackgroundManager.State.fight)
+        //{
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                timer = attackDistance;
+                Debug.Log("攻击一回");
+            }
+        //}
     }
 
     /// <summary>
@@ -136,7 +161,7 @@ public class FighterManager : FighterBase {
     }
 
 
-    private const float offsetH = 1.6f;
+    private const float offsetH = 3f;
     private const float offsetV = 1.6f;
     private const float offsetD = 3.6f;
     private void PlaceFighter(Fighter fighter, int posIndex, bool isPlayer)
@@ -144,57 +169,8 @@ public class FighterManager : FighterBase {
         Vector3 zero = Vector3.zero;
         Quaternion identity = Quaternion.identity;
         Debug.Log(isPlayer);
-        
-        if (isPlayer)
-        {
-            //fighter.transform.localScale *= SCALE;
-            float x = 0;
-            float y = offsetD / 2;
-            //y
-            if (posIndex > 3)
-            {
-                y += offsetV;
-            }
-            if (posIndex % 2 == 0)
-            {
-                y = -y;
-            }
-            //x
-            switch (posIndex / 2)
-            {
-                case 0:
-                    x = -offsetH / 2;
-                    break;
-                case 1:
-                    x = offsetH / 2;
-                    break;
-                case 2:
-                    x = -offsetH;
-                    break;
-                case 3:
-                    x = 0;
-                    break;
-                case 4:
-                    x = offsetH;
-                    break;
-            }
-            Debug.Log(fighter.name + "_" + x+"_"+y);
-            zero = new Vector3(x, y, 0);
-            //zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterStartPosByPhase(fighter.GetIndexAtLive());
-            //identity = Quaternion.LookRotation(base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
-        }
-        //else
-        //{
-        //    int monsterIndex = posIndex - BattleGlobal.FighterNumberMax;
-        //    if ((monsterIndex >= 0) && (monsterIndex < BattleGlobal.FighterNumberOneSide))
-        //    {
-        //            zero = base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterEndPosByPhase(monsterIndex + BattleGlobal.FighterNumberOneSide);
-        //            identity = Quaternion.LookRotation(-base.gameObject.GetComponent<BattleCom_ScenePosManager>().GetSceneFighterDirByPhase());
-        //    }
-        //}
-        //fighter.transform.TransformPoint(zero);
+        zero = teamPos[posIndex];
         fighter.transform.Translate(zero);
-        //fighter.transform.Translate(x, y, 0);
         fighter.transform.rotation = identity;
     }
 }

@@ -50,23 +50,29 @@ public class GameMain : GameBase
         //gameMainObj.GetComponent<BattleCom_CameraManager>().InitBindCamera();
         //gameMainObj.GetComponent<BattleCom_CameraManager>().SetEnable(false);
         base.battleGameData.attActor = new List<FighterData>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
-            FighterData f1 = new FighterData();
-            f1.entry = i;
-            if (i < BattleGlobal.FighterNumberOneSide)
+            if (i == 0 || i == 1 || i == 2 || i == 6 || i == 7 || i == 8)
             {
-                f1.isHero = true;
+                base.battleGameData.attActor.Add(null);
             }
             else
             {
-                f1.isHero = false;
+                FighterData f1 = new FighterData();
+                f1.entry = i;
+                if (i < BattleGlobal.FighterNumberOneSide)
+                {
+                    f1.isHero = true;
+                }
+                else
+                {
+                    f1.isHero = false;
+                }
+                f1.maxHp = 500;
+                f1.curHp = 500;
+                base.battleGameData.attActor.Add(f1);
             }
-            f1.maxHp = 500;
-            f1.curHp = 500;
-            base.battleGameData.attActor.Add(f1);
         }
-       
         //base.battleGameData.attActor = null;
         //base.battleGameData.defActor = null;
         //base.battleGameData.drops = null;

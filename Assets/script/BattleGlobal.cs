@@ -28,8 +28,8 @@ public class BattleGlobal
     //public static readonly Vector3 FighterBoxColliderSize = new Vector3(1f, 1f, 1f);
     //public static readonly float FighterDeadDurTime = 0.5f;
     //public static readonly float FighterHPChangeDelayTime = 0f;
-    public static readonly int FighterNumberMax = 100;
-    public static readonly int FighterNumberOneSide = 5;
+    public static readonly int FighterNumberMax = 12;
+    public static readonly int FighterNumberOneSide = 6;
     //public static readonly string FightStandAnimName = "stand";
     //private static float innerBaseTimeScale = 1f;
     //public static readonly string MaterialFSMPrefab = "BattlePrefabs/MaterialFSMInfo";

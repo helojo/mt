@@ -14,7 +14,7 @@ public class Fighter : MonoBehaviour {
     public float Scale;
     public FighterData actor;
     public int entry;//实例id
-
+    private Transform avar;
     public void Init(BattleData _data, float _scale, bool _isPlayer, int _entry, FighterData _actor)
     {
         battleData = _data;
@@ -22,16 +22,22 @@ public class Fighter : MonoBehaviour {
         isPlayer = _isPlayer;
         //MaxHP = actor.maxHp;
         //HP = actor.curHp;
-        //Energy = _detailActor.energy;
         //Scale = _scale;
         //actor = _actor;
         //entry = _entry;
         //isBegin = false;
-        //obj = (MonoBehaviour.Instantiate(hero, Vector3.zero, Quaternion.identity) as GameObject);
-        //obj = (GameObject)Resources.Load("Prefabs/hero");
-        //Instantiate(obj, new Vector3(0, 0, 0), Quaternion.identity);
-        //obj.transform.parent = this.transform;  
         //Debug.Log(obj);
+        //Texture txr = (Texture)Resources.Load("hero/hero1");
+
+        avar = gameObject.transform.FindChild("avar");
+        SpriteRenderer spr = avar.GetComponent<SpriteRenderer>();
+        Texture2D texture2d = (Texture2D)Resources.Load("hero/" + _entry);
+        //Debug.Log("hero/" + _entry);
+        Sprite sp = Sprite.Create(texture2d, spr.sprite.textureRect, new Vector2(0.5f, 0.5f));
+        spr.sprite = sp;
+        //avar = tx;
+        //avar.renderer.material.mainTexture = txr;
+        //avar.renderer.merial.mainTexture = txr;
     }
 
 	void Start () {
