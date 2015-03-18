@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class FighterBase : MonoBehaviour
+public class BattleBase : MonoBehaviour
 {
     public virtual void OnCreateInit()
     {

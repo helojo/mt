@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class FighterManager : FighterBase {
+public class FighterManager : BattleBase {
 
     //private FighterManager fighterManager;
 
     public List<Vector3> teamPos = new List<Vector3>();//位置列表
+    public List<Vector3> attrackPos = new List<Vector3>();//攻击站位列表
+
     private List<Fighter> fighters { get; set; }//战斗对象
     public GameObject playerTeamObj { get; private set; }
-    public TeamMove teamMove { get; set; }
+    //public TeamMove teamMove { get; set; }
     private GameObject fighterCard;
     private GameObject fighterEffect;
 
@@ -21,20 +23,37 @@ public class FighterManager : FighterBase {
     public FighterManager()
     {
         //英雄
-        teamPos.Add(new Vector3(-2, -1.2f, 0));
-        teamPos.Add(new Vector3(0, -1.2f, 0));
-        teamPos.Add(new Vector3(2, -1.2f, 0));
         teamPos.Add(new Vector3(-2, -3.6f, 0));
         teamPos.Add(new Vector3(0, -3.6f, 0));
         teamPos.Add(new Vector3(2, -3.6f, 0));
+        teamPos.Add(new Vector3(-2, -1.2f, 0));
+        teamPos.Add(new Vector3(0, -1.2f, 0));
+        teamPos.Add(new Vector3(2, -1.2f, 0));
+        
         //怪物
-        teamPos.Add(new Vector3(-2, 1.2f, 0));
-        teamPos.Add(new Vector3(0, 1.2f, 0));
-        teamPos.Add(new Vector3(2, 1.2f, 0));
         teamPos.Add(new Vector3(-2, 3.6f, 0));
         teamPos.Add(new Vector3(0, 3.6f, 0));
         teamPos.Add(new Vector3(2, 3.6f, 0));
+        teamPos.Add(new Vector3(-2, 1.2f, 0));
+        teamPos.Add(new Vector3(0, 1.2f, 0));
+        teamPos.Add(new Vector3(2, 1.2f, 0));
         
+
+        attrackPos.Add(new Vector3(-2, -1.2f, 0));
+        attrackPos.Add(new Vector3(0, -1.2f, 0));
+        attrackPos.Add(new Vector3(2, -1.2f, 0));
+        attrackPos.Add(new Vector3(-2, -2.6f, 0));
+        attrackPos.Add(new Vector3(0, -2.6f, 0));
+        attrackPos.Add(new Vector3(2, -2.6f, 0));
+
+        attrackPos.Add(new Vector3(-2, 1.2f, 0));
+        attrackPos.Add(new Vector3(0, 1.2f, 0));
+        attrackPos.Add(new Vector3(2, 1.2f, 0));
+        attrackPos.Add(new Vector3(-2, 1.2f, 0));
+        attrackPos.Add(new Vector3(0, 1.2f, 0));
+        attrackPos.Add(new Vector3(2, 1.2f, 0));
+
+
         fighters = new List<Fighter>(new Fighter[BattleGlobal.FighterNumberMax * 2]);
         fighterCard = (GameObject)Resources.Load("Prefabs/hero");
         //fighterEffect = (GameObject)Resources.Load("Prefabs/fightEffect");
@@ -45,7 +64,7 @@ public class FighterManager : FighterBase {
     {
         BattleData battleData = base.battleData;
         battleData.OnMsgEnter = (Action)Delegate.Combine(battleData.OnMsgEnter, new Action(OnMsgEnter));
-        BattleData data2 = base.battleData;
+        //BattleData data2 = base.battleData;
         //data2.OnMsgLeave = (System.Action)Delegate.Combine(data2.OnMsgLeave, new System.Action(this.OnMsgLeave));
         //FighterData data3 = base.fighterData;
         //data3.OnMsgTimeScaleChange = (System.Action)Delegate.Combine(data3.OnMsgTimeScaleChange, new System.Action(this.OnMsgTimeScaleChange));
@@ -83,6 +102,12 @@ public class FighterManager : FighterBase {
                 AddFighter(actor, posIndex);
                 posIndex++;
             }
+            posIndex = 6;
+            foreach (FighterData actor in base.battleData.defActor)
+            {
+                AddFighter(actor, posIndex);
+                posIndex++;
+            }
             //OnFighterInitFinish();
         }
     }
@@ -95,17 +120,72 @@ public class FighterManager : FighterBase {
 
     private float timer = 0f;
     public const float attackDistance = 1f;
+
+    private bool inFighing;
+
+    private int curFighter=0;
+    private int curDeffi;
+
     void Update()
     {
         //if (BackgroundManager.state == BackgroundManager.State.fight)
         //{
-            timer -= Time.deltaTime;
-            if (timer <= 0)
+            if(!inFighing)
             {
-                timer = attackDistance;
-                Debug.Log("攻击一回");
+                Debug.Log(GetMonsterFighters().Count);
+                Debug.Log(GetPlayerFighters().Count);
+                if (GetMonsterFighters().Count > 0 && GetPlayerFighters().Count > 0)
+                {
+                    if (curFighter == BattleGlobal.FighterNumberMax - 1)
+                        curFighter = 0;
+                    if (curFighter < BattleGlobal.FighterNumberOneSide)
+                        curDeffi = BattleGlobal.FighterNumberOneSide + curFighter;
+                    else
+                        curDeffi = curFighter - BattleGlobal.FighterNumberOneSide;
+
+                    Debug.Log("当前攻击者：" + curFighter);
+                    attrack(curFighter, curDeffi);
+                    curFighter++;
+                }
+                
             }
         //}
+    }
+
+    private void attrack(int sp, int dp)
+    {
+        Fighter fight = fighters[sp];
+        if (fight == null)
+        {
+            inFighing = false;
+            return;
+        }
+        inFighing = true;
+        Hashtable args = new Hashtable();
+        args.Add("position", attrackPos[dp]);
+        args.Add("oncomplete", "moveToEnd");
+        args.Add("oncompleteparams", sp);
+        args.Add("oncompletetarget", gameObject);
+        iTween.MoveTo(fight.gameObject, args);
+    }
+
+    private void moveToEnd(int pos)
+    {
+        Fighter f = fighters[pos];
+        effect.Play("dao");
+        fighters[curDeffi].subHp(50);
+        Hashtable args = new Hashtable();
+        args.Add("position", teamPos[pos]);
+        args.Add("oncomplete", "moveBackEnd");
+        args.Add("oncompleteparams", pos);
+        args.Add("oncompletetarget", gameObject);
+        args.Add("delay", 1);
+        iTween.MoveTo(fighters[pos].gameObject, args);
+    }
+
+    private void moveBackEnd(int pos)
+    {
+        inFighing=false;
     }
 
     /// <summary>
@@ -144,6 +224,7 @@ public class FighterManager : FighterBase {
         fighter.PosIndex = pos;
         fighter.Init(base.battleData, scale, flag, entry, actor);
         fighters[pos] = fighter;
+        //Debug.Log(pos + "_" + fighter.ToString());
         UpdateFighterPos(pos);
         return obj2;
     }
@@ -172,5 +253,39 @@ public class FighterManager : FighterBase {
         zero = teamPos[posIndex];
         fighter.transform.Translate(zero);
         fighter.transform.rotation = identity;
+    }
+
+    public List<Fighter> GetMonsterFighters()
+    {
+        List<Fighter> list = new List<Fighter>();
+        for (int i = BattleGlobal.FighterNumberOneSide; i < BattleGlobal.FighterNumberMax; i++)
+        {
+            if (this.fighters[i] != null)
+            {
+                list.Add(this.fighters[i]);
+            }
+        }
+        return list;
+    }
+
+    public List<Fighter> GetPlayerFighters()
+    {
+        List<Fighter> list = new List<Fighter>();
+        for (int i = 0; i < BattleGlobal.FighterNumberOneSide; i++)
+        {
+            if (this.fighters[i] != null)
+            {
+                list.Add(fighters[i]);
+            }
+        }
+        return list;
+    }
+
+    public void DestoryFighter(int index)
+    {
+        Fighter obj = fighters[index];
+        //obj.OnDestory();
+        Destroy(obj.gameObject);
+        fighters[index] = null;
     }
 }

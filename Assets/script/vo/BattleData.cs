@@ -17,7 +17,7 @@ public class BattleData
     //public Action<bool, BattleNormalGameType, BattleNormalGameResult> callBackFunc;
     //public ShotState cameraShotType;
     //public int CurBattlePhase = -1;
-    //public List<CombatTeam> defActor;
+    public List<FighterData> defActor;
     //public List<MonsterDrop> drops;
     //public int dupID;
     //public int gridActivityEntry = -1;
