@@ -76,6 +76,20 @@ public class FighterManager : BattleBase {
         //Debug.Log("alet");
     }
 
+    public IEnumerator OnBackgroundMoveEnd()
+    {
+        if (!monstersShow)
+        {
+            List<Fighter> monsters = GetMonsterFighters();
+            foreach (Fighter f in monsters)
+            {
+                iTween.FadeTo(f.gameObject, 1, 1);
+            }
+            yield return new WaitForSeconds(3.0f);
+            monstersShow = true;
+        }
+    }
+
     private void OnMsgEnter()
     {
         //if (!BattleSceneStarter.G_isTestEnable)
@@ -108,7 +122,17 @@ public class FighterManager : BattleBase {
                 AddFighter(actor, posIndex);
                 posIndex++;
             }
-            //OnFighterInitFinish();
+            OnFighterInitFinish();
+        }
+    }
+
+    private void OnFighterInitFinish()
+    {
+        List<Fighter> monsters = GetMonsterFighters();
+        foreach (Fighter f in monsters)
+        {
+            //f.gameObject.SetActive(false);
+            iTween.FadeTo(f.gameObject, 0,0);
         }
     }
 
@@ -126,11 +150,15 @@ public class FighterManager : BattleBase {
     private int curFighter=0;
     private int curDeffi;
 
+    private bool monstersShow;
+
     void Update()
     {
         //if (BackgroundManager.state == BackgroundManager.State.fight)
         //{
-            if(!inFighing)
+        if(BackgroundManager.state == BackgroundManager.State.fight)
+        {
+            if (monstersShow && !inFighing)
             {
                 Debug.Log(GetMonsterFighters().Count);
                 Debug.Log(GetPlayerFighters().Count);
@@ -147,9 +175,23 @@ public class FighterManager : BattleBase {
                     attrack(curFighter, curDeffi);
                     curFighter++;
                 }
-                
             }
-        //}
+        }
+    }
+
+
+    private bool gameOver;
+
+    void OnGUI()
+    {
+        if (gameOver)
+            GUI.Window(0, new Rect((Screen.width - 240) / 2, (Screen.height - 100) / 2, 240, 100), WindowContain, "战斗胜利");
+    }
+
+    void WindowContain(int windowID) 
+    {
+        GUI.Label(new Rect(10, 30, 200, 80), "恭喜您得到屠龙刀");
+        //GUI.Label(Rect(10, 10, 100, 20), "Hello World!");
     }
 
     private void attrack(int sp, int dp)
@@ -173,13 +215,13 @@ public class FighterManager : BattleBase {
     {
         Fighter f = fighters[pos];
         effect.Play("dao");
-        fighters[curDeffi].subHp(50);
+        fighters[curDeffi].subHp(30);
         Hashtable args = new Hashtable();
         args.Add("position", teamPos[pos]);
         args.Add("oncomplete", "moveBackEnd");
         args.Add("oncompleteparams", pos);
         args.Add("oncompletetarget", gameObject);
-        args.Add("delay", 1);
+        args.Add("delay", 0.1);
         iTween.MoveTo(fighters[pos].gameObject, args);
     }
 
@@ -260,9 +302,9 @@ public class FighterManager : BattleBase {
         List<Fighter> list = new List<Fighter>();
         for (int i = BattleGlobal.FighterNumberOneSide; i < BattleGlobal.FighterNumberMax; i++)
         {
-            if (this.fighters[i] != null)
+            if (fighters[i] != null && !fighters[i].isDead)
             {
-                list.Add(this.fighters[i]);
+                list.Add(fighters[i]);
             }
         }
         return list;
@@ -273,7 +315,7 @@ public class FighterManager : BattleBase {
         List<Fighter> list = new List<Fighter>();
         for (int i = 0; i < BattleGlobal.FighterNumberOneSide; i++)
         {
-            if (this.fighters[i] != null)
+            if (fighters[i] != null && !fighters[i].isDead)
             {
                 list.Add(fighters[i]);
             }

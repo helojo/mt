@@ -13,23 +13,25 @@ public class Fighter : MonoBehaviour {
     private Transform avar;
     private Transform hpBar;
 
-    public int MaxHP = 500;
-    public int HP = 500;
+    public int MaxHP = 10;
+    public int HP = 10;
     public int attack;
     public int deff;
+
+    public bool isDead;
 
     public void Init(BattleData _data, float _scale, bool _isPlayer, int _entry, FighterData _actor)
     {
         battleData = _data;
         //CardEntry = _cardEntry;
         isPlayer = _isPlayer;
-        //MaxHP = actor.maxHp;
-        //HP = actor.curHp;
+        //Debug.Log(actor.maxHp);
+        MaxHP = _actor.maxHp;
+        HP = _actor.curHp;
         //Scale = _scale;
-        //actor = _actor;
-        //entry = _entry;
+        actor = _actor;
+        entry = _entry;
         //isBegin = false;
-        //Debug.Log(obj);
         //Texture txr = (Texture)Resources.Load("hero/hero1");
         hpBar = gameObject.transform.FindChild("hp");
         avar = gameObject.transform.FindChild("avar");
@@ -43,11 +45,6 @@ public class Fighter : MonoBehaviour {
         //avar.renderer.merial.mainTexture = txr;
     }
 
-    void OnGUI()
-    {
-        //GUI.HorizontalScrollbar(rctBloodBar, 1.0f, 1f, 0.0f, 1.0f);
-    }
-
     public void subHp(int n)
     {
         HP -= n;
@@ -55,6 +52,8 @@ public class Fighter : MonoBehaviour {
         {
             //gameObject.SetActive(false);
             //return;
+            OnDead();
+            return;
         }
         else
         {
@@ -74,10 +73,18 @@ public class Fighter : MonoBehaviour {
     private Rect rctBloodBar;
 	void Start () {
 
-        //rctBloodBar = new Rect(20, 20, 20, 200);
 	}
 
 	void Update () {
 	
 	}
+
+    private void OnDead()
+    {
+        isDead = true;
+        gameObject.SetActive(false);
+        //this.moveControler.SetDead(true);
+        //this.ClearBuffer();
+        //base.StartCoroutine(this.StartOnDead());
+    }
 }

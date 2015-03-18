@@ -15,7 +15,7 @@ public class MtMain : MonoBehaviour {
     {
         if (!isStartGame)
         {
-            if (GUI.Button(new Rect(Screen.width / 2 - 25, Screen.height / 2 - 15, 80, 30), "开始战斗"))
+            if (GUI.Button(new Rect((Screen.width-80)/2, (Screen.height-30)/2, 80, 30), "开始战斗"))
             {
                 isStartGame = true;
                 Debug.Log("[MtMain] 点击开始战斗按钮");
