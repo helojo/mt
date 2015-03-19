@@ -25,39 +25,8 @@ public class GameMain : GameBase
     public override void OnEnter()
     {
         Debug.Log("[GameMain] 进入游戏");
-        base.battleGameData.attActor = new List<FighterData>();
-        base.battleGameData.defActor = new List<FighterData>();
-
-        //////////////////////////////////////////////////////////////////////////
-        //测试数据
-        for (int i = 0; i < 3; i++)
-        {
-            FighterData f1 = new FighterData();
-            f1.entry = i;
-            f1.maxHp = 100;
-            f1.curHp = 100;
-            base.battleGameData.attActor.Add(f1);
-        }
-        for (int i = 0; i < 3; i++)
-        {
-            FighterData f1 = new FighterData();
-            f1.entry = BattleGlobal.FighterNumberOneSide+i;
-            f1.maxHp = 100;
-            f1.curHp = 100;
-            base.battleGameData.defActor.Add(f1);
-        }
-        //////////////////////////////////////////////////////////////////////////
-
+        
         base.battleGameData.OnMsgEnter();
-    }
-
-    public override void OnLeave()
-    {
-        //base.OnLeave();
-        //if (base.battleGameData.OnMsgLeave != null)
-        //{
-        //    base.battleGameData.OnMsgLeave();
-        //}
     }
 
 }

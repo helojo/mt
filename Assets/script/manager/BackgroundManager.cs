@@ -3,25 +3,18 @@ using System.Collections;
 using System;
 
 public class BackgroundManager : BattleBase{
-    //public GameObject objBg1 = null;
-    //public GameObject objBg2 = null;
-    //private Texture txr = null;
 
-    public static State state = State.walk;
-
-    public enum State
-    {
-        walk, appear, fight, win, fail
-    }
     private float speed = -1.2f;
-    private float y = 0;//gameObj.y
+    private float y = 0;
     public const float maxWalk = 4;
     public float walk = maxWalk;
     public float walkPercent = 0;
-    private const float H = 12.8f;//objBg1.h
+    private const float H = 12.8f;
 
     public GameObject bg1;
     public GameObject bg2;
+
+    private bool moveEnd;
 
     public override void OnCreateInit()
     {
@@ -40,6 +33,7 @@ public class BackgroundManager : BattleBase{
         SpriteRenderer spr2 = bg2.GetComponent<SpriteRenderer>();
         spr2.sprite = sp;
         bg2.transform.Translate(0, 8, 0);
+        BattleState.GetInstance().state = BattleState.State.walk;
     }
 
     private void OnMsgEnter()
@@ -48,15 +42,13 @@ public class BackgroundManager : BattleBase{
     }
 
 	void Start () {
-        state = State.walk;
+
 	}
 	
 	void Update () {
-        switch (state)
+        if (BattleState.GetInstance().state == BattleState.State.walk && !moveEnd)
         {
-            case State.walk:
-                moveBg();
-                break;
+            moveBg();
         }
 	}
 	private void moveBg(){
@@ -65,7 +57,7 @@ public class BackgroundManager : BattleBase{
         if (walk <= 0)
         {
             move -= walk;
-            state = State.fight;
+            moveEnd = true;
             walk = maxWalk;
             base.battleData.gameMainObj.SendMessage("OnBackgroundMoveEnd");
         }
@@ -76,7 +68,6 @@ public class BackgroundManager : BattleBase{
             y = 0;
         }
         Vector3 v3 = gameObject.transform.localPosition;
-        Debug.Log(y);
         v3.y = y;
         gameObject.transform.localPosition = v3;
 	}
